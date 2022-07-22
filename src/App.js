@@ -14,6 +14,7 @@ export default function App() {
           <Route path="/" element={ <SignIn /> } />
           <Route path="/sign-up" element={ <SignUp /> }/>
           <Route path="/subscriptions" element={ <Subscriptions/> }/>
+          <Route path="/subscriptions/:id" element />
         </Routes>
       </UserProvider>
     </BrowserRouter>
