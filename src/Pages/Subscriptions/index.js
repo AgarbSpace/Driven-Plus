@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { Rings } from "react-loader-spinner";
+import PaymentPage from "../../components/PaymentForm";
 import useToken from "../../hooks/useToken";
 import { getSubscriptions } from "../../services/subsApi";
 import { SubInfoContainer, SubscriptionContainer } from "./styled/subscriptionsPageStyled";
 
 export default function Subscriptions() {
   const [ subscriptions, setSubscriptions ] = useState([]);
+  const [ selectedSubscription, setSelectedSubscription ] = useState("noSelected")
   const token = useToken();
 
   useEffect(() => {
@@ -28,11 +30,17 @@ export default function Subscriptions() {
     )
   }
 
+  if(selectedSubscription !== "noSelected"){
+    return(
+      <PaymentPage subId = {selectedSubscription}/>
+    );
+  }
+
   return (
     <SubscriptionContainer>
       <span>Escolha seu Plano</span>
       {subscriptions.map((infos) => 
-        <SubInfoContainer>
+        <SubInfoContainer onClick={() => setSelectedSubscription(infos.id)}>
           <img key={infos.id} src={infos.image} alt="logo" />
           <span>R$ {infos.price}</span>
         </SubInfoContainer>
