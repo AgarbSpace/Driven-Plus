@@ -3,6 +3,7 @@ import { UserProvider } from "./contexts/userContext";
 import GlobalStyle from "./GlobalStyle";
 import SignIn from "./Pages/Auth/SignIn";
 import SignUp from "./Pages/Auth/SignUp";
+import Home from "./Pages/Home";
 import Subscriptions from "./Pages/Subscriptions";
 
 export default function App() {
@@ -15,6 +16,7 @@ export default function App() {
           <Route path="/sign-up" element={ <SignUp /> }/>
           <Route path="/subscriptions" element={ <Subscriptions/> }/>
           <Route path="/subscriptions/:id" element />
+          <Route path="/home" element={<Home />} />
         </Routes>
       </UserProvider>
     </BrowserRouter>

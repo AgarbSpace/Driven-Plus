@@ -1,6 +1,8 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Rings } from "react-loader-spinner";
+import { useNavigate } from "react-router-dom";
 import PaymentPage from "../../components/PaymentForm";
+import UserContext from "../../contexts/userContext";
 import useToken from "../../hooks/useToken";
 import { getSubscriptions } from "../../services/subsApi";
 import { SubInfoContainer, SubscriptionContainer } from "./styled/subscriptionsPageStyled";
@@ -8,7 +10,9 @@ import { SubInfoContainer, SubscriptionContainer } from "./styled/subscriptionsP
 export default function Subscriptions() {
   const [ subscriptions, setSubscriptions ] = useState([]);
   const [ selectedSubscription, setSelectedSubscription ] = useState("noSelected")
+  const { userData } = useContext(UserContext);
   const token = useToken();
+  const navigate = useNavigate()
 
   useEffect(() => {
     async function getSubs() {
@@ -21,6 +25,10 @@ export default function Subscriptions() {
     }
     getSubs()
   }, [token]);
+
+  if(userData.membership !== null) {
+    navigate("/home");
+  }
 
   if( subscriptions.length === 0 ) {
     return (

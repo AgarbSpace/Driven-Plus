@@ -15,6 +15,7 @@ export default function PaymentPage({subId}) {
     expirationDate: ""
   });
   const [ subscriptionData, setSubscriptionData ] = useState(null);
+  const [ display, setDisplay ] = useState("none")
   const token = useToken();
   const { userData } = useContext(UserContext);
 
@@ -41,10 +42,15 @@ export default function PaymentPage({subId}) {
   function handleInputChange(e){
     setCardForm({...cardForm, [e.target.name]: e.target.value});
   }
+  
+  function confirmPayment(e){
+    e.preventDefault();
+  }
 
-  return (
-    <PaymentContainer>
-      <PopUp />
+  if(display === "flex"){
+    return (
+      <PaymentContainer>
+      <PopUp flex = "flex" setDisplay={setDisplay} id = {subId} />
       <Back>
         <ion-icon name="arrow-back-outline"></ion-icon>
       </Back>
@@ -64,14 +70,49 @@ export default function PaymentPage({subId}) {
         </div>
         <Subtitle>{subscriptionData.price} cobrados mensalmente</Subtitle>
       </Perks>
-      <CardForm>
+      <CardForm onSubmit={confirmPayment}>
         <input placeholder="Nome impresso no cartão" type="text" name="cardName" value={cardForm.cardName} onChange={handleInputChange} />
         <input placeholder="Digitos do cartão" type="text" name="cardNumber" value={cardForm.cardNumber} onChange={handleInputChange} />
         <div>
           <input placeholder="Código de segurança" type="text" name="securityNumber" value={cardForm.securityNumber} onChange={handleInputChange} />
           <input placeholder="Validade" type="text" name="expirationDate" value={cardForm.expirationDate} onChange={handleInputChange} />
         </div>
-        <button type="submit" >ASSINAR</button>
+        <button type="submit" onClick={() => setDisplay("flex")} >ASSINAR</button>
+      </CardForm>
+    </PaymentContainer>
+    )
+  }
+
+  return (
+    <PaymentContainer>
+      <PopUp display = "none"/>
+      <Back>
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </Back>
+      <img src={subscriptionData.image} alt="logo" />
+      <SubscriptionTitle>{subscriptionData.name}</SubscriptionTitle>
+      <Perks>
+        <div>
+          <ion-icon name="list-circle-outline"></ion-icon>
+          <Subtitle>Benefícios:</Subtitle>
+        </div>
+        {subscriptionData.perks.map((perk, index) => 
+          <PerksName>{index+1}. {perk.title}</PerksName>
+        )}
+        <div>
+          <ion-icon name="card-outline"></ion-icon>
+          <Subtitle>Preco:</Subtitle>
+        </div>
+        <Subtitle>{subscriptionData.price} cobrados mensalmente</Subtitle>
+      </Perks>
+      <CardForm onSubmit={confirmPayment}>
+        <input placeholder="Nome impresso no cartão" type="text" name="cardName" value={cardForm.cardName} onChange={handleInputChange} />
+        <input placeholder="Digitos do cartão" type="text" name="cardNumber" value={cardForm.cardNumber} onChange={handleInputChange} />
+        <div>
+          <input placeholder="Código de segurança" type="text" name="securityNumber" value={cardForm.securityNumber} onChange={handleInputChange} />
+          <input placeholder="Validade" type="text" name="expirationDate" value={cardForm.expirationDate} onChange={handleInputChange} />
+        </div>
+        <button type="submit" onClick={() => setDisplay("flex")} >ASSINAR</button>
       </CardForm>
     </PaymentContainer>
   );
