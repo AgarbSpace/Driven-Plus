@@ -1,16 +1,12 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Rings } from "react-loader-spinner";
 import { useNavigate } from "react-router-dom";
-import PaymentPage from "../../components/PaymentForm";
-import UserContext from "../../contexts/userContext";
 import useToken from "../../hooks/useToken";
 import { getSubscriptions } from "../../services/subsApi";
 import { SubInfoContainer, SubscriptionContainer } from "./styled/subscriptionsPageStyled";
 
-export default function Subscriptions() {
+export default function Subscriptions({changePlan}) {
   const [ subscriptions, setSubscriptions ] = useState([]);
-  const [ selectedSubscription, setSelectedSubscription ] = useState("noSelected")
-  const { userData } = useContext(UserContext);
   const token = useToken();
   const navigate = useNavigate()
 
@@ -26,10 +22,6 @@ export default function Subscriptions() {
     getSubs()
   }, [token]);
 
-  if(userData.membership !== null) {
-    navigate("/home");
-  }
-
   if( subscriptions.length === 0 ) {
     return (
       <SubscriptionContainer>
@@ -38,17 +30,11 @@ export default function Subscriptions() {
     )
   }
 
-  if(selectedSubscription !== "noSelected"){
-    return(
-      <PaymentPage subId = {selectedSubscription}/>
-    );
-  }
-
   return (
     <SubscriptionContainer>
       <span>Escolha seu Plano</span>
       {subscriptions.map((infos) => 
-        <SubInfoContainer onClick={() => setSelectedSubscription(infos.id)}>
+        <SubInfoContainer onClick={() => navigate(`/subscriptions/${infos.id}`)}>
           <img key={infos.id} src={infos.image} alt="logo" />
           <span>R$ {infos.price}</span>
         </SubInfoContainer>

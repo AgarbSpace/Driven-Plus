@@ -7,6 +7,7 @@ const HomeContainer = styled.div`
   flex-direction: column;
   align-items: center;
   padding-top: 20px;
+  background-color: #000000;
 `
 
 const ContentContainer = styled.div`

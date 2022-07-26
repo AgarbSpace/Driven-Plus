@@ -1,9 +1,36 @@
 import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 import UserContext from "../../contexts/userContext";
+import useToken from "../../hooks/useToken";
+import { cancelSubs } from "../../services/subsApi";
 import { ChangeOrCancelButtonsContainer, ContentContainer, HomeContainer, UserAndPerksContainer } from "./styled/homeStyled";
 
-export default function Home(){
-  const { userData } = useContext(UserContext);
+export default function Home() {
+  const { userData, setUserData } = useContext(UserContext);
+  const navigate = useNavigate();
+  const token = useToken();
+
+  function handlePlanChange() {
+    setUserData({...userData, membership: null});
+    navigate("/subscriptions");
+  }
+
+  async function cancelPlan() {
+    try {
+      cancelSubs(token);
+      setUserData({...userData, membership: null});
+      navigate("/subscriptions");
+      
+    } catch (error) {
+        Swal.fire({
+            html: `<h1 style = 'color: #000000; background-color: #FFFFFF; font-family: Roboto; font-weight: 700; font-size: 18px; text-align: center; line-height: 21px;'>Algo deu errado, tente novamente! </h1>`,
+            width: '80%',
+            background: '#FFFFFF',
+            confirmButtonColor: '#FF4791'
+          })
+    }
+  }
 
   return (
     <HomeContainer>
@@ -18,8 +45,8 @@ export default function Home(){
           <button>{perk.title}</button>)}
         </UserAndPerksContainer>
         <ChangeOrCancelButtonsContainer>
-          <button>Alterar Plano</button>
-          <button>Cancelar Plano</button>
+          <button onClick={handlePlanChange}>Alterar Plano</button>
+          <button onClick={cancelPlan}>Cancelar Plano</button>
         </ChangeOrCancelButtonsContainer>
       </ContentContainer>'
     </HomeContainer>

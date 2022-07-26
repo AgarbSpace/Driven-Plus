@@ -7,6 +7,7 @@ const PaymentContainer = styled.div`
   flex-direction: column;
   align-items: center;
   padding-top: 25px;
+  background-color: #000000;
 
   img{
     width: 95px;

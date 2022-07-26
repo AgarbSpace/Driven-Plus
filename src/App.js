@@ -1,4 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import PaymentPage from "./components/PaymentForm";
 import { UserProvider } from "./contexts/userContext";
 import GlobalStyle from "./GlobalStyle";
 import SignIn from "./Pages/Auth/SignIn";
@@ -14,8 +15,8 @@ export default function App() {
         <Routes>
           <Route path="/" element={ <SignIn /> } />
           <Route path="/sign-up" element={ <SignUp /> }/>
-          <Route path="/subscriptions" element={ <Subscriptions/> }/>
-          <Route path="/subscriptions/:id" element />
+          <Route path="/subscriptions" element={ <Subscriptions /> }/>
+          <Route path="/subscriptions/:id" element={<PaymentPage />} />
           <Route path="/home" element={<Home />} />
         </Routes>
       </UserProvider>

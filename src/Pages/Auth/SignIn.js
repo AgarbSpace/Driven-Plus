@@ -3,7 +3,7 @@ import logo from "../../assets/divenpluslogo.png";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css"
 import { Rings } from "react-loader-spinner";
 import { Link, useNavigate } from "react-router-dom";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import UserContext from "../../contexts/userContext";
 import { signInPost } from "../../services/authApi";
 
@@ -13,8 +13,18 @@ export default function SignIn() {
     password: ""
   });
   const [buttonStatus, setButtonStatus] = useState("loaded");
-  const { setUserData } = useContext(UserContext);
+  const { userData, setUserData } = useContext(UserContext);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if(JSON.stringify(userData) !== "{}" && userData.membership !== null){
+        navigate("/home");
+        return;
+    }
+    if(JSON.stringify(userData) !== "{}"){
+      navigate("/subscriptions");
+    }
+  }, [userData, navigate]);
 
   function handleInputChange(e){
     setLoginForm({...loginForm, [e.target.name]: e.target.value});
@@ -26,10 +36,9 @@ export default function SignIn() {
     try {
       const userData = await signInPost(loginForm); 
       setUserData(userData);
-      //toast("Login realizado com sucesso!!");
       navigate("/subscriptions")
     } catch (error) {
-      //toast("Não foi possível fazer o login!!");
+      console.log(error);
       setButtonStatus("loaded");
     }
   }

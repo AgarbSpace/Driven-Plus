@@ -5,7 +5,6 @@ const GlobalStyle = createGlobalStyle`
    ${reset}
    *{
       box-sizing: border-box;
-      background-color: #000000;
    }
 `;
 
